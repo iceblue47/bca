@@ -7,7 +7,7 @@ REPO="https://raw.githubusercontent.com/myridwan/scriptvps/ipuk/"
 CDNF="https://raw.githubusercontent.com/myridwan/vvip/ipuk"
 ###
 BURIQ () {
-    curl -sS https://raw.githubusercontent.com/iceblue47/bca/main/ip > /root/tmp
+    curl -sS https://raw.githubusercontent.com/MyRidwan/izinvps/ipuk/ip > /root/tmp
     data=( `cat /root/tmp | grep -E "^### " | awk '{print $2}'` )
     for user in "${data[@]}"
     do
@@ -23,9 +23,9 @@ BURIQ () {
     done
     rm -f  /root/tmp
 }
-# https://raw.githubusercontent.com/iceblue47/bca/main/ip 
+# https://raw.githubusercontent.com/MyRidwan/izinvps/ipuk/ip 
 MYIP=$(curl -sS ipv4.icanhazip.com)
-Name=$(curl -sS https://raw.githubusercontent.com/iceblue47/bca/main/ip | grep $MYIP | awk '{print $2}')
+Name=$(curl -sS https://raw.githubusercontent.com/MyRidwan/izinvps/ipuk/ip | grep $MYIP | awk '{print $2}')
 echo $Name > /usr/local/etc/.$Name.ini
 CekOne=$(cat /usr/local/etc/.$Name.ini)
 
@@ -42,7 +42,7 @@ fi
 
 PERMISSION () {
     MYIP=$(curl -sS ipv4.icanhazip.com)
-    IZIN=$(curl -sS https://raw.githubusercontent.com/iceblue47/bca/main/ip | awk '{print $4}' | grep $MYIP)
+    IZIN=$(curl -sS https://raw.githubusercontent.com/MyRidwan/izinvps/ipuk/ip | awk '{print $4}' | grep $MYIP)
     if [ "$MYIP" = "$IZIN" ]; then
     Bloman
     else
@@ -161,9 +161,21 @@ echo -e "[ ${green}INFO${NC} ] Preparing the install file"
 apt install git curl -y >/dev/null 2>&1
 echo -e "[ ${green}INFO${NC} ] Allright good ... installation file is ready"
 sleep 2
+echo -ne "[ ${green}INFO${NC} ] Check permission : "
 
-
-
+PERMISSION
+if [ -f /home/needupdate ]; then
+red "Your script need to update first !"
+exit 0
+elif [ "$res" = "Permission Accepted..." ]; then
+green "Permission Accepted!"
+else
+red "Permission Denied!"
+rm setup.sh > /dev/null 2>&1
+sleep 10
+exit 0
+fi
+sleep 3
 
 mkdir -p /etc/ssnvpn
 mkdir -p /etc/ssnvpn/theme
